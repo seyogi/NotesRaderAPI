@@ -29,10 +29,8 @@ def calc_score(dict,name,diff,score,Theme):
                 return round(float(dict[name][diff][Theme]) * per_score,2)
     return 0
 
-def f(file_path,Theme):
-    csv_file = open(file_path, "r", encoding="utf-8", errors="", newline="" )
+def f(csv_file,Theme):
     f = pd.read_csv(csv_file)
-    csv_file.close()
     list_score = f[['タイトル', 'HYPER スコア', 'ANOTHER スコア', 'LEGGENDARIA スコア']].values.tolist()
 
     csv_sph = open("resources/Hyper.csv", "r", encoding="utf-8", errors="", newline="" )
