@@ -1,8 +1,5 @@
-import numpy as np
 import csv
-import os
 import sys
-import pprint
 import pandas as pd
 
 
@@ -29,7 +26,7 @@ def calc_score(dict,name,diff,score,Theme):
                 return round(float(dict[name][diff][Theme]) * per_score,2)
     return 0
 
-def f(csv_file,Theme):
+def f(csv_file,Theme,displayNum):
     f = pd.read_csv(csv_file)
     list_score = f[['タイトル', 'HYPER スコア', 'ANOTHER スコア', 'LEGGENDARIA スコア']].values.tolist()
 
@@ -45,27 +42,25 @@ def f(csv_file,Theme):
     for score in list_score:
         dict_score.append({'曲名':score[0],'sph':score[1],'spa':score[2],'spl':score[3]})
 
-    que_score = [[0]]
+    que_score = [{'Score':0}]
 
     for row in dict_score:
         for diff in ['sph','spa','spl']:
             S = calc_score(dict,row['曲名'],diff,float(row[diff]),Theme)
-            if S > que_score[-1][0]:
-                que_score.append([S,row['曲名'],diff])
-                que_score = sorted(que_score, reverse=True)
-            if len(que_score)>10:
+            if S > que_score[-1]['Score']:
+                que_score.append({'Score':S,'Name':row['曲名'],'diff':diff})
+                que_score = sorted(que_score, key=lambda x:x['Score'], reverse=True)
+            if len(que_score)>displayNum:
                 que_score.pop()
     
-    #pprint.pprint(que_score)
-
     return que_score
 
 def main():
     args = sys.argv
-    if len(args) != 3:
+    if len(args) != 4:
         print("args error")
         return
-    f(args[1],args[2])
+    f(args[1],args[2],args[3])
 
 if __name__ == "__main__":
     main()
