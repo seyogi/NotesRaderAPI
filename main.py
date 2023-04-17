@@ -18,13 +18,18 @@ async def root():
     return {"message": "Hello World"}
 
 @app.post("/iidx/uploadtext/")
-async def upload_text(text: str = Form(),Theme: str="NOTES",displayNum: int=10):
-    return {"message": iidx_full.f(io.StringIO(text),Theme,displayNum)}
+async def upload_text(text: str = Form(),displayNum: int=10):
+    return {"message": iidx_full.f2(io.StringIO(text),displayNum)}
 
+@app.post("/iidx/uploadfile/")
+async def upload_file(file: UploadFile = File(...),displayNum: int=10):
+    return {"message": iidx_full.f2(file.file,displayNum)}
+
+"""
 @app.post("/iidx/uploadfile/")
 async def upload_file(file: UploadFile = File(...),Theme: str="NOTES",displayNum: int=10):
     return {"message": iidx_full.f(file.file,Theme,displayNum)}
-
+"""
 
 #curl --noproxy 127.0.0.1 http://127.0.0.1:8000/iidx/?Theme=0
 #uvicorn main:app
